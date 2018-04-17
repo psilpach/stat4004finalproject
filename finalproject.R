@@ -7,7 +7,11 @@ data(hc)
 # part 1: data preprocessing
 
 # create data frame "nodes" that contains nodes.id, nodes.type, and nodes.type2
-nodes <- as.data.frame(hc$ID1, c("nodes.id", "nodes.type", "nodes.type2"))
+# “nodes.id” (the ID of the subjects 1-75), “nodes.type”(can take values
+# “ADM”, “NUR”,”MED”,”PAT”), and nodes.type2 (1-4 that corresponds to the four node types).
+
+nodes <- as.data.frame(hc, c("nodes.id", "nodes.type", "nodes.type2"))
+
 # create adjacency matrix based on hc
 
 # transfer matrix to data frame called links using
