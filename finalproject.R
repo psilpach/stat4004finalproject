@@ -1,22 +1,41 @@
 # final project 3 for Michael Han and Pim Silpacharn
 #install.packages('sand')
 library('sand')
+library(dplyr)
 require(igraph)
 data(hc)
-
+View(hc)
 # part 1: data preprocessing
 
 # create data frame "nodes" that contains nodes.id, nodes.type, and nodes.type2
-# “nodes.id” (the ID of the subjects 1-75), “nodes.type”(can take values
-# “ADM”, “NUR”,”MED”,”PAT”), and nodes.type2 (1-4 that corresponds to the four node types).
+# "nodes.id" (the ID of the subjects 1-75), "nodes.type"(can take values
+# "ADM", "NUR","MED","PAT"), and nodes.type2 (1-4 that corresponds to the four node types).
 
-nodes <- as.data.frame(hc, c("nodes.id", "nodes.type", "nodes.type2"))
+nodes.ID <- as.vector(unique(cbind(hc$ID1, hc$ID2)))
+nodes.type <- as.vector(unique(cbind(hc$S1, hc$S2)))
+#nodes.ID <- unique(data.frame(ID1 = c(hc[,"ID1"], hc[,"ID2"])))
+#nodes.id <- unique(ID)
+#nodes.type <- unique(data.frame(S1 = c(hc[,"S1"], hc[,"S2"])))
+#nodes.type <- unique(type)
+
+nodes.type2 <- hc %>%
+  mutate(node.type2 = case_when(
+    S1 == 'ADM' ~ 1,
+    S1 == 'NUR' ~ 2,
+    S1 == 'MED' ~ 3,
+    S1 == 'PAT' ~ 4))
+
+View(hc)
+newdataframe = cbind(nodes.ID, nodes.type)
+nodes <- subset(nodes.id, nodes.type, hc, select = c("ID1", "nodes.type", "node.type2"))
+colnames(nodes) <-  c("nodes.id", "nodes.type", "node.type2")
+View(nodes)
 
 # create adjacency matrix based on hc
+graph.adjacency()
 
 # transfer matrix to data frame called links using
-graph.adjacency()
-get.data.frame()
+links <- get.data.frame(nodes)
 
 # based on "nodes" and "links", create igraph object called "net"
 net <- graph.data.frame(links, nodes, directed=F) 
