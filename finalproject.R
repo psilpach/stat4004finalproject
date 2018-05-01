@@ -1,7 +1,13 @@
+
+x = c(1,2,3)
+y = c(4,5)
+z = c(x,y)
+
 # final project 3 for Michael Han and Pim Silpacharn
 #install.packages('sand')
 library('sand')
 library(dplyr)
+library(tidyr)
 require(igraph)
 data(hc)
 View(hc)
@@ -10,6 +16,40 @@ View(hc)
 # create data frame "nodes" that contains nodes.id, nodes.type, and nodes.type2
 # "nodes.id" (the ID of the subjects 1-75), "nodes.type"(can take values
 # "ADM", "NUR","MED","PAT"), and nodes.type2 (1-4 that corresponds to the four node types).
+
+#nodes.ID = rbind(hc$ID1, hc$ID2)
+
+one = as.vector(unique(hc$ID1))
+two = as.vector(unique(hc$ID2))
+nodes.ID = as.vector(sort(unique(c(one, two))))
+#nodes.ID = as.data.frame(nodes.ID)
+View(nodes.ID)
+nodes.type = rep(NA, 75)
+nodes.type2 = rep(NA, 75)
+
+i = 1
+while (i <= 75){
+  if (any(which(hc$ID1 == nodes.ID[i]))){
+  nodes.type[i] = as.character(unique(hc$S1[which(hc$ID1 == nodes.ID[i])]))
+  nodes.type2[i] = unique(hc$S1[which(hc$ID1 == nodes.ID[i])])
+  } else {
+  nodes.type[i] = as.character(unique(hc$S2[which(hc$ID2 == nodes.ID[i])]))
+  nodes.type2[i] = unique(hc$S2[which(hc$ID2 == nodes.ID[i])])
+  }
+  i = i + 1
+}
+
+nodes = cbind(nodes.ID, nodes.type, nodes.type2)
+names(nodes) <- c("nodes.ID", "nodes.type", "nodes.type2")
+
+---
+
+a = as.character(unique(hc$S1))
+b = as.character(unique(hc$S2))
+nodes.type = c(a,b)
+View(nodes.type)
+
+nodes = cbind(nodes.ID, nodes.type)
 
 nodes.ID <- as.vector(unique(cbind(hc$ID1, hc$ID2)))
 nodes.type <- as.vector(unique(cbind(hc$S1, hc$S2)))
